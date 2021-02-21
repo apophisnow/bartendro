@@ -6,8 +6,8 @@ from subprocess import call
 from time import sleep, localtime, time
 import serial
 from struct import pack, unpack
-import pack7
-import dispenser_select
+from . import pack7
+from . import dispenser_select
 from bartendro.error import SerialIOError
 import random
 
@@ -76,7 +76,7 @@ log = logging.getLogger('bartendro')
 
 def crc16_update(crc, a):
     crc ^= a
-    for i in xrange(0, 8):
+    for i in range(0, 8):
         if crc & 1:
             crc = (crc >> 1) ^ 0xA001
         else:
@@ -99,10 +99,10 @@ class RouterDriver(object):
 
         # dispenser_ids are the ids the dispensers have been assigned. These are logical ids 
         # used for dispenser communication.
-        self.dispenser_ids = [-1 for i in xrange(MAX_DISPENSERS)]
+        self.dispenser_ids = [-1 for i in range(MAX_DISPENSERS)]
 
         # dispenser_ports are the ports the dispensers have been plugged into.
-        self.dispenser_ports = [255 for i in xrange(MAX_DISPENSERS)]
+        self.dispenser_ports = [255 for i in range(MAX_DISPENSERS)]
 
         if software_only:
             self.num_dispensers = MAX_DISPENSERS
@@ -144,12 +144,12 @@ class RouterDriver(object):
                                      parity=serial.PARITY_NONE, 
                                      stopbits=serial.STOPBITS_ONE,
                                      timeout=.01)
-        except serial.serialutil.SerialException, e:
+        except serial.serialutil.SerialException as e:
             raise SerialIOError(e)
 
         log.info("Done.\n")
 
-        import status_led
+        from . import status_led
         self.status = status_led.StatusLED(self.software_only)
         self.status.set_color(0, 0, 1)
 
@@ -163,7 +163,7 @@ class RouterDriver(object):
 
         log.info("Discovering dispensers")
         self.num_dispensers = 0
-        for port in xrange(MAX_DISPENSERS):
+        for port in range(MAX_DISPENSERS):
             self._log_startup("port %d:" % port)
             self.dispenser_select.select(port)
             sleep(.01)
@@ -199,7 +199,7 @@ class RouterDriver(object):
         self.set_timeout(DEFAULT_TIMEOUT)
         self.ser.write(chr(255));
 
-        duplicate_ids = [x for x, y in collections.Counter(self.dispenser_ids).items() if y > 1]
+        duplicate_ids = [x for x, y in list(collections.Counter(self.dispenser_ids).items()) if y > 1]
         if len(duplicate_ids):
             for dup in duplicate_ids:
                 if dup == -1: continue
@@ -475,7 +475,7 @@ class RouterDriver(object):
                 log.error("*** send packet: read timeout")
                 log.error("*** dispenser: %d, type: %d" % (dest + 1, ord(packet[1:2])))
                 return False
-        except SerialException, err:
+        except SerialException as err:
             log.error("SerialException: %s" % err);
             return False
 

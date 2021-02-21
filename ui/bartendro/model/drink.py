@@ -26,7 +26,7 @@ class Drink(db.Model):
 
     query = db.session.query_property()
 
-    def __init__(self, desc = u'', data = None, size = DEFAULT_SUGGESTED_DRINK_SIZE, popular = False, available = True):
+    def __init__(self, desc = '', data = None, size = DEFAULT_SUGGESTED_DRINK_SIZE, popular = False, available = True):
         self.name = DrinkName()
         if data: 
             self.update(data)

@@ -6,7 +6,7 @@ from time import sleep
 try:
     import RPi.GPIO as gpio
     gpio_missing = 0
-except ImportError, e:
+except ImportError as e:
     if e.message != 'No module named RPi.GPIO':
         raise
     gpio_missing = 1

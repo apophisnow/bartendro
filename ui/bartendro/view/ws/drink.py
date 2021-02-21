@@ -4,7 +4,7 @@ from time import sleep
 from operator import itemgetter
 from bartendro import app, db, mixer
 from flask import Flask, request
-from flask.ext.login import login_required, current_user
+from flask_login import login_required, current_user
 from werkzeug.exceptions import ServiceUnavailable, BadRequest, InternalServerError
 from bartendro.model.drink import Drink
 from bartendro.model.drink_name import DrinkName
@@ -22,11 +22,11 @@ def ws_make_drink(drink_id):
     drink = Drink.query.filter_by(id=int(drink_id)).first()
     try:
         app.mixer.make_drink(drink, recipe)
-    except mixer.BartendroCantPourError, err:
+    except mixer.BartendroCantPourError as err:
         raise BadRequest(err)
-    except mixer.BartendroBrokenError, err:
+    except mixer.BartendroBrokenError as err:
         raise InternalServerError(err)
-    except mixer.BartendroBusyError, err:
+    except mixer.BartendroBusyError as err:
         raise ServiceUnavailable(err)
 
     return "ok\n"
@@ -72,11 +72,11 @@ def ws_shots(booze_id):
 
     try:
         app.mixer.dispense_shot(dispenser, app.options.shot_size)
-    except mixer.BartendroCantPourError, err:
+    except mixer.BartendroCantPourError as err:
         raise BadRequest(err)
-    except mixer.BartendroBrokenError, err:
+    except mixer.BartendroBrokenError as err:
         raise InternalServerError(err)
-    except mixer.BartendroBusyError, err:
+    except mixer.BartendroBusyError as err:
         raise ServiceUnavailable(err)
 
     return ""

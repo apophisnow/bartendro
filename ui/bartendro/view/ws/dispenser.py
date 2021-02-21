@@ -4,7 +4,7 @@ from time import sleep
 from werkzeug.exceptions import ServiceUnavailable
 from bartendro import app, db, mixer
 from flask import Flask, request
-from flask.ext.login import current_user
+from flask_login import current_user
 from bartendro.model.drink import Drink
 from bartendro.model.booze import Booze
 from bartendro.model.dispenser import Dispenser
@@ -86,11 +86,11 @@ def ws_dispenser_clean():
 
     try:
         app.mixer.clean()
-    except BartendroCantPourError, err:
+    except BartendroCantPourError as err:
         raise BadRequest(err)
-    except BartendroBrokenError, err:
+    except BartendroBrokenError as err:
         raise InternalServerError(err)
-    except BartendroBusyError, err:
+    except BartendroBusyError as err:
         raise ServiceUnavailable(err)
 
     return ""
@@ -105,11 +105,11 @@ def ws_dispenser_clean_right():
 
     try:
         app.mixer.clean_right()
-    except BartendroCantPourError, err:
+    except BartendroCantPourError as err:
         raise BadRequest(err)
-    except BartendroBrokenError, err:
+    except BartendroBrokenError as err:
         raise InternalServerError(err)
-    except BartendroBusyError, err:
+    except BartendroBusyError as err:
         raise ServiceUnavailable(err)
     return ""
 
@@ -123,11 +123,11 @@ def ws_dispenser_clean_left():
 
     try:
         app.mixer.clean_left()
-    except BartendroCantPourError, err:
+    except BartendroCantPourError as err:
         raise BadRequest(err)
-    except BartendroBrokenError, err:
+    except BartendroBrokenError as err:
         raise InternalServerError(err)
-    except BartendroBusyError, err:
+    except BartendroBusyError as err:
         raise ServiceUnavailable(err)
 
     return ""

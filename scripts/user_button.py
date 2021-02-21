@@ -15,7 +15,7 @@ def wait_for_button():
 	try:
 	    file = open(inputDevice, "rb") # standard binary file input
 	except IOError:
-	    print "Cannot open %s. Are you root?" % inputDevice
+	    print("Cannot open %s. Are you root?" % inputDevice)
 	    sys.exit(1)
 
 	event = file.read(inputEventSize)

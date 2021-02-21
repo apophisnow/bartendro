@@ -34,7 +34,7 @@ class Booze(db.Model):
     UniqueConstraint('name', name='booze_name_undx')
  
     query = db.session.query_property()
-    def __init__(self, name = u'', brand = u'', desc = u'', abv = 0, type = 0, out = 0, data = None):
+    def __init__(self, name = '', brand = '', desc = '', abv = 0, type = 0, out = 0, data = None):
         if data: 
             self.update(data)
             return

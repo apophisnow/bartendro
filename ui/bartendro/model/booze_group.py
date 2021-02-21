@@ -17,7 +17,7 @@ class BoozeGroup(db.Model):
  
     query = db.session.query_property()
 
-    def __init__(self, name = u''):
+    def __init__(self, name = ''):
         self.name = name
         db.session.add(self)
 

@@ -3,7 +3,7 @@ import time
 from bartendro import app, db
 from sqlalchemy import desc
 from flask import Flask, request, render_template
-from flask.ext.login import login_required
+from flask_login import login_required
 from bartendro.model.drink import Drink
 from bartendro.model.drink_log import DrinkLog
 from bartendro.model.booze import Booze
@@ -44,7 +44,7 @@ def trending_drinks_detail(hours):
         else:
             begindate = 0
     else:
-	begindate = 0
+        begindate = 0
         enddate = 0
         txt = ""
 

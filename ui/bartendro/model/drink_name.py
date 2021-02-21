@@ -17,7 +17,7 @@ class DrinkName(db.Model):
  
     query = db.session.query_property()
 
-    def __init__(self, name = u'', sortname = u'', is_common = False):
+    def __init__(self, name = '', sortname = '', is_common = False):
         self.name = name
         self.sortname = sortname
         self.is_common = is_common

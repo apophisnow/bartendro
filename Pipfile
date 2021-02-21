@@ -1,0 +1,21 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+flake8 = "*"
+
+[packages]
+python-memcached = ">=1.58"
+pyserial = ">=3.4"
+Werkzeug = ">=0.12.2"
+Jinja2 = ">=2.9.6"
+WTForms = ">=2.1"
+SQLAlchemy = ">=1.1.14"
+Flask = ">=0.12.2"
+Flask-Login = ">=0.4.0"
+Flask-SQLAlchemy = ">=2.2"
+
+[requires]
+python_version = "3.8"

@@ -5,7 +5,7 @@ import traceback
 from time import sleep, time
 from threading import Thread
 from flask import Flask, current_app
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 import memcache
 from sqlalchemy.orm import mapper, relationship, backref
 from bartendro import db, app
@@ -97,7 +97,7 @@ class Mixer(object):
             self.do_event(fsm.EVENT_MAKE_DRINK)
             if drink and drink.id:
                 size = 0
-                for k in recipe.keys():
+                for k in list(recipe.keys()):
                     size += recipe[k] 
                 t = int(time())
                 dlog = DrinkLog(drink.id, t, size)
@@ -150,19 +150,19 @@ class Mixer(object):
                     log.error("Current state: %d, event %d. Can't find next state." % (cur_state, event))
                     raise BartendroBrokenError("Internal error. Bartendro has had one too many.")
 
-            except BartendroBrokenError, err:
+            except BartendroBrokenError as err:
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 #traceback.print_tb(exc_traceback)
                 self._state_error()
                 app.globals.set_state(fsm.STATE_ERROR)
                 raise
 
-            except BartendroCantPourError, err:
+            except BartendroCantPourError as err:
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 #traceback.print_tb(exc_traceback)
                 raise
                 
-            except BartendroCurrentSenseError, err:
+            except BartendroCurrentSenseError as err:
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 #traceback.print_tb(exc_traceback)
                 raise BartendroBrokenError(err)
@@ -221,7 +221,7 @@ class Mixer(object):
         except BartendroLiquidLevelReadError:
             raise BartendroBrokenError("Failed to read liquid levels")
 
-        booze_id = self.recipe.data.keys()[0]
+        booze_id = list(self.recipe.data.keys())[0]
         dispensers = db.session.query(Dispenser).order_by(Dispenser.id).all()
         for i, disp in enumerate(dispensers):
             if disp.booze_id == booze_id:
@@ -289,7 +289,7 @@ class Mixer(object):
                 continue
 
             found = False
-            for i in xrange(self.disp_count):
+            for i in range(self.disp_count):
                 disp = dispensers[i]
 
 
@@ -330,12 +330,12 @@ class Mixer(object):
 
     def _state_test_dispense(self):
 
-        booze_id = self.recipe.data.keys()[0]
+        booze_id = list(self.recipe.data.keys())[0]
         ml = self.recipe.data[booze_id]
 
         recipe = {}
         dispensers = db.session.query(Dispenser).order_by(Dispenser.id).all()
-        for i in xrange(self.disp_count):
+        for i in range(self.disp_count):
             if booze_id == dispensers[i].booze_id:
                 recipe[i] =  ml
                 self._dispense_recipe(recipe, True)
@@ -375,17 +375,16 @@ class Mixer(object):
         sleep(.01)
 
         level = self.driver.get_liquid_level(dispenser)
-	log.info("initial reading: %d" % level)
+        log.info("initial reading: %d" % level)
         if level <= threshold:
-	    log.info("liquid is out before starting: %d" % level)
-	    return
+            log.info("liquid is out before starting: %d" % level)
+            return
 
         last = -1
         self.driver.start(dispenser)
         while level > threshold:
             if not self.driver.update_liquid_levels():
                 raise BartendroBrokenError("Failed to update liquid levels")
-                return
             sleep(.01)
             level = self.driver.get_liquid_level(dispenser)
             if level != last:
@@ -394,7 +393,7 @@ class Mixer(object):
 
         self.driver.stop(dispenser)
         log.info("Stopped at level: %d" % level)
-        sleep(.1);
+        sleep(.1)
         level = self.driver.get_liquid_level(dispenser)
         log.info("motor stopped at level: %d" % level)
 
