@@ -123,15 +123,13 @@ logger.addHandler(handler)
 logger.info("Bartendro start up sequence:")
 
 try:
-    app.software_only = args.software_only or int(
-        os.environ['BARTENDRO_SOFTWARE_ONLY'])
+    app.software_only = args.software_only or int(os.environ['BARTENDRO_SOFTWARE_ONLY'])
     app.num_dispensers = 15
 except KeyError:
     app.software_only = 0
 
 if not os.path.exists("bartendro.db"):
-    print("bartendro.db file not found. Please copy bartendro.db.default to ")
-    print("bartendro.db in order to provide Bartendro with a starting database.")
+    print("bartendro.db file not found. Please copy bartendro.db.default to bartendro.db in order to provide Bartendro with a starting database.")
     sys.exit(-1)
 
 # Create a memcache connection and flush everything
@@ -188,8 +186,7 @@ else:
     app.options = load_options()
     app.mixer = mixer.Mixer(app.driver, app.mc)
     if app.software_only:
-        logging.info(
-            "Running SOFTWARE ONLY VERSION. No communication between software and hardware chain will happen!")
+        logging.info("Running SOFTWARE ONLY VERSION. No communication between software and hardware chain will happen!")
 
     logging.info("Bartendro started")
     app.debug = args.debug
