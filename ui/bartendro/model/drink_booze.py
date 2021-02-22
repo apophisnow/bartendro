@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from bartendro import db
-from sqlalchemy.orm import mapper, relationship
-from sqlalchemy import Table, Column, Integer, String, MetaData, UnicodeText, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, ForeignKey
+
 
 class DrinkBooze(db.Model):
     """
@@ -15,7 +14,7 @@ class DrinkBooze(db.Model):
     booze_id = Column(Integer, ForeignKey('booze.id'), nullable=False)
     value = Column(Integer, default=1)
     unit = Column(Integer, default=1)
- 
+
     query = db.session.query_property()
 
     def __init__(self, drink, booze, value, unit):
@@ -28,16 +27,16 @@ class DrinkBooze(db.Model):
 #        db.session.add(self)
 
     def json(self):
-        return { 
-                 'id' : self.id, 
-                 'value' : self.value,
-                 'unit' : self.unit,
-               }
+        return {
+            'id': self.id,
+            'value': self.value,
+            'unit': self.unit,
+        }
 
     def __repr__(self):
-        return "<DrinkBooze(%d,<Drink>(%d),<Booze>(%d),%d,%d)>" % (self.id or -1, 
-                                                 self.drink.id,
-                                                 self.booze.id or -1,
-                                                 self.value, 
-                                                 self.unit)
-
+        return "<DrinkBooze(%d,<Drink>(%d),<Booze>(%d),%d,%d)>" % (self.id or -1,
+                                                                   self.drink.id,
+                                                                   self.booze.id or -1,
+                                                                   self.value,
+                                                                   self.unit
+                                                                   )

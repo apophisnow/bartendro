@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import sys
-import os
 import logging
 from time import sleep
 from bartendro.error import BartendroBrokenError

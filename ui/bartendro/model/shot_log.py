@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from bartendro import db
-from sqlalchemy.orm import mapper, relationship
-from sqlalchemy import Table, Column, Integer, String, MetaData, Unicode, UnicodeText, UniqueConstraint, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, ForeignKey
+
 
 class ShotLog(db.Model):
     """
@@ -14,7 +13,7 @@ class ShotLog(db.Model):
     booze_id = Column(Integer, ForeignKey('booze.id'), nullable=False)
     time = Column(Integer, nullable=False, default=0)
     size = Column(Integer, nullable=False, default=-1)
- 
+
     query = db.session.query_property()
 
     def __init__(self, booze_id=-1, time=0, size=0):
@@ -25,4 +24,3 @@ class ShotLog(db.Model):
 
     def __repr__(self):
         return "<ShotLog(%d,'%s')>" % (self.id, self.booze_id)
-

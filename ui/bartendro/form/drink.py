@@ -1,7 +1,8 @@
 #!/usr/bin/env python
-from wtforms import Form, TextField, DecimalField, HiddenField, validators, TextAreaField, SubmitField, BooleanField
+from wtforms import Form, TextField, HiddenField, validators, TextAreaField, SubmitField, BooleanField
 
-MAX_SUGGESTED_DRINK_SIZE = 5000 # in ml
+MAX_SUGGESTED_DRINK_SIZE = 5000  # in ml
+
 
 class DrinkForm(Form):
     id = HiddenField("id", default=0)
@@ -11,5 +12,6 @@ class DrinkForm(Form):
     available = BooleanField("List this drink in the main menu")
     save = SubmitField("save")
     cancel = SubmitField("cancel")
+
 
 form = DrinkForm()

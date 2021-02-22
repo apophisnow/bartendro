@@ -1,19 +1,18 @@
 # -*- coding: utf-8 -*-
 import logging
-from time import sleep, time
-from threading import Thread
-from bartendro import db, app
+from time import sleep
 from bartendro.error import BartendroBrokenError
 from bartendro.router.driver import MOTOR_DIRECTION_FORWARD
 
-CLEAN_DURATION = 10 # seconds
+CLEAN_DURATION = 10  # seconds
 
 log = logging.getLogger('bartendro')
+
 
 class CleanCycle(object):
     left_set = [4, 5, 6, 7, 8, 9, 10]
     right_set = [0, 1, 2, 3, 11, 12, 13, 14]
-    STAGGER_DELAY = .150 # ms
+    STAGGER_DELAY = .150  # ms
 
     def __init__(self, mixer, mode):
         self.mixer = mixer

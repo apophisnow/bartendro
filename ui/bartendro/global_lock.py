@@ -9,6 +9,7 @@ try:
 except ImportError:
     have_uwsgi = False
 
+
 class BartendroLock(object):
     def __init__(self, globals):
         self.globals = globals
@@ -19,11 +20,11 @@ class BartendroLock(object):
 
     def __exit__(self, type, value, traceback):
         self.globals.unlock_bartendro()
-    
+
+
 class BartendroGlobalLock(object):
     '''This class manages the few global settings that Bartendro needs including a global state and
        a global Bartendro lock to prevent concurrent access to the hardware'''
-
 
     def __init__(self):
         self.state = fsm.STATE_START
@@ -34,13 +35,14 @@ class BartendroGlobalLock(object):
            Bartendro."""
 
         # If we're not running inside uwsgi, then don't try to use the lock
-        if not have_uwsgi: return True
+        if not have_uwsgi:
+            return True
 
         uwsgi.lock()
         is_locked = uwsgi.sharedarea_read8(0, 0)
         if is_locked:
-           uwsgi.unlock()
-           return False
+            uwsgi.unlock()
+            return False
         uwsgi.sharedarea_write8(0, 0, 1)
         uwsgi.unlock()
 
@@ -50,13 +52,14 @@ class BartendroGlobalLock(object):
         """Call this function when you've previously locked bartendro and now you want to unlock it."""
 
         # If we're not running inside uwsgi, then don't try to use the lock
-        if not have_uwsgi: return True
+        if not have_uwsgi:
+            return True
 
         uwsgi.lock()
         is_locked = uwsgi.sharedarea_read8(0, 0)
         if not is_locked:
-           uwsgi.unlock()
-           return False
+            uwsgi.unlock()
+            return False
         uwsgi.sharedarea_write8(0, 0, 0)
         uwsgi.unlock()
 
@@ -66,7 +69,8 @@ class BartendroGlobalLock(object):
         '''Get the current state of Bartendro'''
 
         # If we're not running inside uwsgi, then we can't keep global state
-        if not have_uwsgi: return self.state
+        if not have_uwsgi:
+            return self.state
 
         uwsgi.lock()
         state = uwsgi.sharedarea_read8(0, 1)

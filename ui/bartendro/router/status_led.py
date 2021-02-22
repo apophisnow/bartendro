@@ -2,7 +2,7 @@
 
 import sys
 import logging
-from time import sleep
+
 try:
     import RPi.GPIO as gpio
     gpio_missing = 0
@@ -11,7 +11,8 @@ except ImportError as e:
         raise
     gpio_missing = 1
 
-log= logging.getLogger('bartendro')
+log = logging.getLogger('bartendro')
+
 
 class StatusLED(object):
 
@@ -22,10 +23,11 @@ class StatusLED(object):
 
     def __init__(self, software_only):
         self.software_only = software_only
-        if self.software_only: return
+        if self.software_only:
+            return
 
         if gpio_missing:
-            loglogerror("You must install the RPi.GPIO module")
+            log.error("You must install the RPi.GPIO module")
             sys.exit(-1)
 
         # select the method by which we want to identify GPIO pins
@@ -41,12 +43,13 @@ class StatusLED(object):
         self.blue = 16
 
     def set_color(self, red, green, blue):
-        if self.software_only: return
+        if self.software_only:
+            return
         if red:
             gpio.output(self.red, gpio.HIGH)
         else:
             gpio.output(self.red, gpio.LOW)
-            
+
         if green:
             gpio.output(self.green, gpio.HIGH)
         else:
