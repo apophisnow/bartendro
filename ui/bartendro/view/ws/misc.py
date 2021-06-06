@@ -9,6 +9,7 @@ from bartendro.model.drink import Drink
 from bartendro.model.booze import Booze
 from bartendro.form.booze import BoozeForm
 from bartendro.error import BartendroBusyError, BartendroBrokenError, BartendroCantPourError, BartendroCurrentSenseError
+import codecs
 
 log = logging.getLogger('bartendro')
 
@@ -59,9 +60,9 @@ def ws_download_db():
 
     # Now read the database into memory
     try:
-        fh = open("bartendro.db", "r")
-        db_data = fh.read()
-        fh.close()
+        with codecs.open("bartendro.db", "r", encoding='utf-8') as fh:
+            db_data = fh.read()
+
     except IOError as e:
         raise ServiceUnavailable("Error: downloading database failed: %s" % e)
 
